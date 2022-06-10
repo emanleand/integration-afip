@@ -1,9 +1,9 @@
 # integration-afip
-Repositories to consult the data of Argentine taxpayers
+Project to manage taxpayer records in our application
+# challenges
+Work the project using a serverless structure
 
-## Context
-The project consults the tax data in a database (dynamo). if the data does not exist, the query is made against an Afip service, to finally persist the information in the DB
-
+Carry out an integration with afip services
 ## Arquitecture
 ![imagen](./diagrams/architecture.svg)
 
