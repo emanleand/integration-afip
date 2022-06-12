@@ -1,0 +1,28 @@
+{
+  "name": "integration-afip",
+  "version": "1.0.0",
+  "description": "Project to manage taxpayer records in our application # challenges Work the project using a serverless structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emanleand/integration-afip.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emanleand/integration-afip/issues"
+  },
+  "homepage": "https://github.com/emanleand/integration-afip#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1152.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16",
+    "serverless-localstack": "^0.4.36"
+  }
+}

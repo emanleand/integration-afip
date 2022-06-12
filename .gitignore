@@ -1,0 +1,5 @@
+/node_modules
+cloudformation-template-create-stack.json
+cloudformation-template-update-stack.json
+serverless-state.json
+aws-nodejs.zip
