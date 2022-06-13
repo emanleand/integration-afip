@@ -1,5 +1,8 @@
 service: registration-of-taxpayers
 
+plugins:
+  - serverless-localstack
+  - serverless-offline
 provider:
   name: aws
   profile: ${opt:profile, self:custom.profile}
@@ -7,8 +10,23 @@ provider:
   runtime: nodejs14.x
   lambdaHashingVersion: '20201221'
 
-plugins:
-  - serverless-localstack
+resources:
+  Resources:
+    TaxPayer:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: cuit
+            AttributeType: S
+        KeySchema:
+          - AttributeName: cuit
+            KeyType: HASH
+        
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        
+        TableName: taxpayer
 
 custom:
   defaultStage: local
@@ -23,4 +41,16 @@ functions:
     events: 
       - http:
           path: health
+          method: get
+  create:
+    handler: src/taxpayer/create.create
+    events: 
+      - http:
+          path: taxpayer
+          method: post
+  get:
+    handler: src/taxpayer/get.get
+    events: 
+      - http:
+          path: taxpayer/{cuit}
           method: get

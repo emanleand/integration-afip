@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk');
 
-function health(event, context) {
+async function health(event, context) {
     return {
-        body: JSON.stringify('healt ok'), 
+        body: JSON.stringify('health ok'), 
     }
 }
 

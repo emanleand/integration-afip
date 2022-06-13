@@ -17,7 +17,9 @@ Carry out an integration with afip services
 	
 -   npm install -g serverless
 -   npm install --save-dev serverless-localstack
-### run serverless with aws locally
+-   npm install --saver-dev serverless-offline
+### Run serverless locally
+#### Create project structure from serverless.yml
     aws configure --profile localstack
         AWS Access Key ID : test
         AWS Secret Access Key : test
@@ -25,7 +27,8 @@ Carry out an integration with afip services
         Default output format [json]: json
 
     serverless deploy --aws-profile localstack
-
+#### Run serverless for local develop
+    sls offline start
 ### remove deploy serverless
     serverless remove --stage dev --region us-east-1 (pending)
     serverless remove --aws-profile localstack (pending)
