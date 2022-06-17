@@ -28,6 +28,10 @@ resources:
         
         TableName: taxpayer
 
+    TaxPayerSQS:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: sqs-queue-${self:custom.defaultStage}
 custom:
   defaultStage: local
   profile: localstack
