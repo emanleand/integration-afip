@@ -1,4 +1,4 @@
-# integration-afip
+# integration-afip (in PROGRESS)
 Project to manage taxpayer records in our application
 # challenges
 Work the project using a serverless structure
