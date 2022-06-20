@@ -1,0 +1,12 @@
+create:
+  handler: src/taxpayer/create.create
+  events: 
+    - http:
+        path: taxpayer
+        method: post
+get:
+  handler: src/taxpayer/get.get
+  events: 
+    - http:
+        path: taxpayer/{cuit}
+        method: get

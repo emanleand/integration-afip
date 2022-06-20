@@ -1,0 +1,9 @@
+validationtrigger:
+  #handler: src/validationTrigger/trigger.handler
+  #events:
+  #  - sqs:
+  #      arn:
+  #        Fn::GetAtt:
+  #          - queue1
+  #          - Arn
+  #      batchSize: 1

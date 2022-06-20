@@ -5,14 +5,20 @@ plugins:
   - serverless-offline
 provider:
   name: aws
+  runtime: nodejs14.x
   profile: ${opt:profile, self:custom.profile}
   stage: ${opt:stage, self:custom.defaultStage}
-  runtime: nodejs14.x
-  lambdaHashingVersion: '20201221'
+  environment:
+    sqsName: ${self:custom.taxPayerSQS.name}
+
+functions:
+  - '${file(src/health.serverless.yml)}'
+  - '${file(src/taxpayer/taxpayer.serverless.yml)}'
+  - '${file(src/validationTrigger/validationTrigger.serverless.yml)}'
 
 resources:
   Resources:
-    TaxPayer:
+    TaxPayerDynamo:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         AttributeDefinitions:
@@ -29,32 +35,15 @@ resources:
         TableName: taxpayer
 
     TaxPayerSQS:
-      Type: AWS::SQS::Queue
+      Type: 'AWS::SQS::Queue'
       Properties:
-        QueueName: sqs-queue-${self:custom.defaultStage}
+        QueueName: ${self:custom.taxPayerSQS.name}
 custom:
   defaultStage: local
   profile: localstack
   localstack:
     debug: true
     stages: [local]
-
-functions:
-  health:
-    handler: src/health.health
-    events: 
-      - http:
-          path: health
-          method: get
-  create:
-    handler: src/taxpayer/create.create
-    events: 
-      - http:
-          path: taxpayer
-          method: post
-  get:
-    handler: src/taxpayer/get.get
-    events: 
-      - http:
-          path: taxpayer/{cuit}
-          method: get
+  taxPayerSQS:
+    name: sqs-queue-${self:custom.defaultStage}
+    url: http://localhost:4566/000000000000/sqs-queue-${self:custom.defaultStage}

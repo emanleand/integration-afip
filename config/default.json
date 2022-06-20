@@ -1,10 +1,16 @@
 {
   "dependencies": {
     "dynamoDb": {
-      "endpoint": "http://localhost:4566",
-      "region": "us-east-1",
-      "accessKeyId": "fake-access-key",
-      "secretAccessKey": "fake-secret-key"
+      "configuration": {
+        "endpoint": "http://localhost:4566",
+        "region": "us-east-1",
+        "accessKeyId": "fake-access-key",
+        "secretAccessKey": "fake-secret-key"
+      },
+      "databaseName": "taxpayer"
+    },
+    "sqs": {
+      "url": "http://localhost:4566/000000000000/sqs-queue-local"
     }
   }
 }

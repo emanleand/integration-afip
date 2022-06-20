@@ -1,0 +1,6 @@
+health:
+  handler: src/health.health
+  events: 
+    - http:
+        path: health
+        method: get

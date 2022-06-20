@@ -7,9 +7,10 @@ const config = require('config');
 
 async function create(event, context) {
   try {
-    const { dynamoDb } = config.get('dependencies');
+    const { configuration, databaseName } = config.get('dependencies.dynamoDb');
+    const { url } = config.get('dependencies.sqs');
 
-    AWS.config.update(dynamoDb);
+    AWS.config.update(configuration);
     const DocumentClient = new AWS.DynamoDB.DocumentClient();
 
     const request = JSON.parse(event.body);
@@ -21,14 +22,14 @@ async function create(event, context) {
 
     request.status = 'pending';
 
-    const newItem = await DocumentClient.put({
-      TableName: 'taxpayer',
+    await DocumentClient.put({
+      TableName: databaseName,
       Item: request
     }).promise();
 
     const payerToValidate = {
       MessageBody: JSON.stringify(request.cuit),
-      QueueUrl: 'http://localhost:4566/sqs-queue-local'
+      QueueUrl: url
     }
 
     const sqs = new SQS();
@@ -38,12 +39,12 @@ async function create(event, context) {
     }
 
     return {
-      body: JSON.stringify(newItem)
+      body: JSON.stringify({ body: 'Successfully created taxpayer!' })
     }
   } catch (error) {
 
     return {
-      statusCode: error.status,
+      statusCode: error.status || 500,
       body: JSON.stringify(error.message)
     }
   }

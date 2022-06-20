@@ -2,21 +2,19 @@ const AWS = require('aws-sdk');
 const assert = require('assert');
 const _ = require('lodash');
 const createError = require('http-errors');
+const config = require('config');
 
 async function get(event, context) {
   try {
-    AWS.config.update({
-      "endpoint": "http://localhost:4566",
-      "accessKeyId": "fake-access-key",
-      "secretAccessKey": "fake-secret-key"
-    });
+    const { configuration, databaseName } = config.get('dependencies.dynamoDb');
+    AWS.config.update(configuration);
 
     const cuit = event.pathParameters.cuit;
 
     const DocumentClient = new AWS.DynamoDB.DocumentClient();
 
     const params = {
-      TableName: 'taxpayer',
+      TableName: databaseName,
       KeyConditionExpression: '#cuit = :cuit',
       ExpressionAttributeNames: {
         '#cuit': 'cuit'
