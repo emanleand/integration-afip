@@ -22,10 +22,24 @@ async function create(event, context) {
 
     request.status = 'pending';
 
-    await DocumentClient.put({
-      TableName: databaseName,
-      Item: request
-    }).promise();
+    try {
+      await DocumentClient.put({
+        TableName: databaseName,
+        Item: request,
+        ConditionExpression: "attribute_not_exists(cuit)"
+      }).promise();
+    } catch (error) {
+      if (error.code === 'ConditionalCheckFailedException') {
+        return {
+          statusCode: 203,
+          body: JSON.stringify({
+            response: 'existing taxpayer'
+          })
+        }
+      }
+
+      throw createError.BadGateway(error.message)
+    };
 
     const payerToValidate = {
       MessageBody: JSON.stringify(request.cuit),
@@ -39,13 +53,18 @@ async function create(event, context) {
     }
 
     return {
-      body: JSON.stringify({ body: 'Successfully created taxpayer!' })
+      statusCode: 201,
+      body: JSON.stringify({
+        response: 'Successfully created taxpayer!'
+      })
     }
   } catch (error) {
 
     return {
-      statusCode: error.status || 500,
-      body: JSON.stringify(error.message)
+      statusCode: error.status || error.statusCode || 500,
+      body: JSON.stringify({
+        response: error.message
+      })
     }
   }
 }
