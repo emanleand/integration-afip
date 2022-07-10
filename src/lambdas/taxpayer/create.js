@@ -5,13 +5,11 @@ const _ = require('lodash');
 const createError = require('http-errors');
 const config = require('config');
 
+const { createTaxpayerService } = require('../../service/taxpayerService');
+
 async function create(event, context) {
   try {
-    const { configuration, databaseName } = config.get('dependencies.dynamoDb');
     const { url } = config.get('dependencies.sqs');
-
-    AWS.config.update(configuration);
-    const DocumentClient = new AWS.DynamoDB.DocumentClient();
 
     const request = JSON.parse(event.body);
     assert(request.firstName, createError.BadRequest());
@@ -19,27 +17,9 @@ async function create(event, context) {
     assert(request.addressStreet, createError.BadRequest());
     assert(request.addressNumber, createError.BadRequest());
     assert(request.cuit, createError.BadRequest());
-
     request.status = 'pending';
 
-    try {
-      await DocumentClient.put({
-        TableName: databaseName,
-        Item: request,
-        ConditionExpression: "attribute_not_exists(cuit)"
-      }).promise();
-    } catch (error) {
-      if (error.code === 'ConditionalCheckFailedException') {
-        return {
-          statusCode: 203,
-          body: JSON.stringify({
-            response: 'existing taxpayer'
-          })
-        }
-      }
-
-      throw createError.BadGateway(error.message)
-    };
+    await createTaxpayerService(request);
 
     const payerToValidate = {
       MessageBody: JSON.stringify(request.cuit),
@@ -58,6 +38,7 @@ async function create(event, context) {
         response: 'Successfully created taxpayer!'
       })
     }
+
   } catch (error) {
 
     return {

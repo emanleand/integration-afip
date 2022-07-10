@@ -12,9 +12,9 @@ provider:
     sqsName: ${self:custom.taxPayerSQS.name}
 
 functions:
-  - '${file(src/health.serverless.yml)}'
-  - '${file(src/taxpayer/taxpayer.serverless.yml)}'
-  - '${file(src/validationTrigger/validationTrigger.serverless.yml)}'
+  - '${file(src/lambdas/health.serverless.yml)}'
+  - '${file(src/lambdas/taxpayer/taxpayer.serverless.yml)}'
+  - '${file(src/lambdas/validationTrigger/validationTrigger.serverless.yml)}'
 
 resources:
   Resources:

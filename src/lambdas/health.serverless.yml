@@ -1,5 +1,5 @@
 health:
-  handler: src/health.health
+  handler: src/lambdas/health.health
   events: 
     - http:
         path: health

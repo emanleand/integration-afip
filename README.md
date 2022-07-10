@@ -85,7 +85,7 @@ To generate a csr certificate, the following steps must be followed:
 
     serverless deploy --aws-profile localstack
 #### Run serverless for local develop
-    sls offline start
+    npm run dev
 ### remove deploy serverless
     serverless remove --stage dev --region us-east-1 (pending)
     serverless remove --aws-profile localstack (pending)

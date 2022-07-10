@@ -1,0 +1,18 @@
+create:
+  handler: src/lambdas/taxpayer/create.create
+  events: 
+    - http:
+        path: taxpayer
+        method: post
+get:
+  handler: src/lambdas/taxpayer/get.get
+  events: 
+    - http:
+        path: taxpayer/{cuit}
+        method: get
+update:
+  handler: src/lambdas/taxpayer/update.update
+  events: 
+    - http:
+        path: taxpayer/{cuit}
+        method: patch
